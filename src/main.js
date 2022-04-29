@@ -34,12 +34,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loginForm.addEventListener("submit", e => {
         e.preventDefault();
-
+        fetch_login();
         // Perform your AJAX/Fetch login
-
         setFormMessage(loginForm, "error", "Invalid username/password combination");
     });
+    createAccountForm.addEventListener("submit", e => {
+        e.preventDefault();
 
+        // Perform your AJAX/Fetch register
+        fetch_register();
+    });
     document.querySelectorAll(".form__input").forEach(inputElement => {
         inputElement.addEventListener("blur", e => {
             if (e.target.id === "signupUsername" && e.target.value.length > 0 && e.target.value.length < 10) {
@@ -51,4 +55,43 @@ document.addEventListener("DOMContentLoaded", () => {
             clearInputError(inputElement);
         });
     });
+
+    //login
+    async function fetch_login(){
+        const user = document.getElementById("user_login").value
+        const pwd = document.getElementById("user_pwd").value
+
+        const response = await fetch('http://localhost:3011/users/login',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: user,
+                password: pwd
+            })
+        });
+
+        const data = await response.json()
+        console.log(data)
+    }
+    //register
+    async function fetch_register(){
+        const user = document.getElementById("signupUsername").value
+        const pwd = document.getElementById("singupPwd").value
+
+        const response = await fetch('http://localhost:3011/users/register',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: user,
+                password: pwd
+            })
+        });
+        
+        const data = await response.json()
+        console.log(data)
+    }
 });
